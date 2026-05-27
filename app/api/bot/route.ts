@@ -31,8 +31,10 @@ export async function POST(request: Request) {
     if (!message?.text) return Response.json({ ok: true })
 
     // Only respond to the owner
-    const fromId = message.from?.id?.toString()
-    if (fromId !== CHAT_ID) return Response.json({ ok: true })
+    const fromId = String(message.from?.id ?? '')
+    const chatId = String(message.chat?.id ?? '')
+    const allowed = CHAT_ID.trim()
+    if (fromId !== allowed && chatId !== allowed) return Response.json({ ok: true })
 
     const text = message.text.trim().toLowerCase()
 
