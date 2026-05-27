@@ -505,6 +505,21 @@ textarea.input-field{resize:vertical;min-height:70px;}
     window.Telegram.WebApp.ready();
     window.Telegram.WebApp.expand();
   }
+
+  // Access guard — only owner can use this app
+  (function() {
+    var OWNER_ID = '5488684822';
+    var tg = window.Telegram && window.Telegram.WebApp;
+    // Only enforce when opened inside Telegram (initData is present)
+    if (tg && tg.initData && tg.initData.length > 0) {
+      var userId = tg.initDataUnsafe && tg.initDataUnsafe.user && String(tg.initDataUnsafe.user.id);
+      if (userId && userId !== OWNER_ID) {
+        document.addEventListener('DOMContentLoaded', function() {
+          document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0e0f0f;font-family:Jost,sans-serif;color:rgba(230,226,218,0.4);font-size:14px;letter-spacing:1px;">Доступ закрыт</div>';
+        });
+      }
+    }
+  })();
 </script></head>
 <body>
 <div class="app">

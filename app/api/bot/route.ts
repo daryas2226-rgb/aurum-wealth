@@ -30,12 +30,15 @@ export async function POST(request: Request) {
     const message = body?.message
     if (!message?.text) return Response.json({ ok: true })
 
+    // Only respond to the owner
+    const fromId = message.from?.id?.toString()
+    if (fromId !== CHAT_ID) return Response.json({ ok: true })
+
     const text = message.text.trim().toLowerCase()
 
     if (text === '/start' || text === '/help') {
       await sendWithWebApp(
         `<b>Aurum</b> — личный финансовый трекер 💰\n\n` +
-        `Отслеживай брокерские счета, депозиты и наличные в одном месте.\n\n` +
         `Нажми кнопку чтобы открыть приложение 👇`,
         '💰 Открыть Aurum'
       )
