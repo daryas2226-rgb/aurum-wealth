@@ -9,11 +9,15 @@ async function send(chatId: number, text: string, keyboard?: object) {
     parse_mode: 'HTML',
   }
   if (keyboard) body.reply_markup = keyboard
-  await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+  const res = await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
   })
+  if (!res.ok) {
+    const err = await res.text()
+    console.error('Telegram sendMessage error:', err, '| TOKEN prefix:', TOKEN?.slice(0, 10), '| chatId:', chatId)
+  }
 }
 
 async function sendApp(chatId: number, text: string) {
