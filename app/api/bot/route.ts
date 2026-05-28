@@ -16,7 +16,7 @@ async function send(chatId: number, text: string, keyboard?: object) {
   })
   if (!res.ok) {
     const err = await res.text()
-    console.error('Telegram sendMessage error:', err, '| TOKEN prefix:', TOKEN?.slice(0, 10), '| chatId:', chatId)
+    console.error(`TG_ERR tok=${TOKEN?.slice(0,15)} chat=${chatId} err=${err.slice(0,80)}`)
   }
 }
 
