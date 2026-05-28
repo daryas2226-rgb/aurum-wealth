@@ -1,4 +1,4 @@
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://aurum-wealth.vercel.app'
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://aurum-wealth-alpha.vercel.app'
 const TOKEN = process.env.TELEGRAM_BOT_TOKEN!
 const OWNER_ID = process.env.TELEGRAM_CHAT_ID!
 
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
 
     if (text === '/start' || text === '/help') {
       await sendApp(chatId,
-        `<b>Aurum</b> — личный финансовый трекер 💰\n\nНажми кнопку чтобы открыть 👇`
+        '<b>Aurum</b> — личный финансовый трекер 💰\n\nНажми кнопку чтобы открыть 👇'
       )
       return Response.json({ ok: true })
     }
@@ -56,7 +56,7 @@ export async function POST(request: Request) {
       return Response.json({ ok: true })
     }
 
-    await sendApp(chatId, `Не понимаю команду.\n\n/start — открыть приложение`)
+    await sendApp(chatId, 'Не понимаю команду.\n\n/start — открыть приложение')
     return Response.json({ ok: true })
   } catch {
     return Response.json({ ok: true })
