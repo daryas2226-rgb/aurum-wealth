@@ -554,6 +554,11 @@ textarea.input-field{resize:vertical;min-height:70px;}
 <div class="drawer-overlay" id="drawer-overlay" onclick="closeMobileDrawer()"></div>
 <div class="more-drawer" id="more-drawer">
   <div class="drawer-handle"></div>
+  <div id="drawer-extra-brokers"></div>
+  <button class="drawer-item" onclick="openAddBrokerModal();closeMobileDrawer();" style="color:rgba(166,130,74,0.7);">
+    <span class="di-icon">+</span> Добавить счёт
+  </button>
+  <div style="height:1px;background:var(--border);margin:6px 0;"></div>
   <button class="drawer-item" id="bn-currency" onclick="showTab(&#39;currency&#39;);closeMobileDrawer();">
     <span class="di-icon">◇</span> Валюта
   </button>
@@ -5456,14 +5461,22 @@ function renderBrokerNavItems() {
   const navRuName = document.getElementById('nav-ru-name');
   if (navUsName) navUsName.textContent = state.us.name || 'US Брокер';
   if (navRuName) navRuName.textContent = state.ru.name || 'RU Брокер';
-  // Render extra broker nav items
+  // Render extra broker nav items in sidebar
   const navContainer = document.getElementById('extra-broker-nav');
-  if (!navContainer) return;
-  navContainer.innerHTML = (state.extraBrokers||[]).map(b => `
-    <div class="nav-item" id="nav-${b.id}-broker" onclick="showTab('${b.id}-broker')">
-      <span class="nav-icon">◈</span> ${escHtml(b.name)}
-    </div>`).join('');
-  // Re-attach event listeners since they're inline onclick already
+  if (navContainer) {
+    navContainer.innerHTML = (state.extraBrokers||[]).map(b => `
+      <div class="nav-item" id="nav-${b.id}-broker" onclick="showTab('${b.id}-broker')">
+        <span class="nav-icon">◈</span> ${escHtml(b.name)}
+      </div>`).join('');
+  }
+  // Render extra broker items in mobile drawer
+  const drawerExtra = document.getElementById('drawer-extra-brokers');
+  if (drawerExtra) {
+    drawerExtra.innerHTML = (state.extraBrokers||[]).map(b => `
+      <button class="drawer-item" id="bn-${b.id}-broker" onclick="showTab('${b.id}-broker');closeMobileDrawer();">
+        <span class="di-icon">◈</span> ${escHtml(b.name)}
+      </button>`).join('');
+  }
 }
 
 function escHtml(s) {
