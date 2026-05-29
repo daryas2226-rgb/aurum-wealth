@@ -336,6 +336,12 @@ textarea.input-field{resize:vertical;min-height:70px;}
 .drawer-overlay.open { display: block; }
 .drawer-handle { width: 36px; height: 3px; background: var(--border); border-radius: 2px; margin: 0 auto 10px; }
 
+/* ── Touch: убираем 300ms задержку на все интерактивные элементы ── */
+button, a, .bn-item, .drawer-item, .bp-item, .broker-sub-tab,
+.dep-sub-tab, .nav-item, .modal-close, .card, input, select {
+  touch-action: manipulation;
+}
+
 /* ── Broker picker ── */
 .broker-picker {
   display: none; position: fixed;
@@ -379,9 +385,25 @@ textarea.input-field{resize:vertical;min-height:70px;}
     flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 20px;
   }
   .page-title { font-size: 28px !important; }
-  .btn-row { flex-wrap: wrap; gap: 8px; }
-  .btn { padding: 10px 16px !important; font-size: 9px !important; }
-  .btn-sm { padding: 8px 12px !important; }
+  /* Кнопки горизонтально скроллятся — не переносятся */
+  .btn-row {
+    flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px; scrollbar-width: none; gap: 8px;
+  }
+  .btn-row::-webkit-scrollbar { display: none; }
+  .btn-row .btn { flex-shrink: 0; }
+  .btn { padding: 11px 16px !important; font-size: 10px !important; min-height: 44px; }
+  .btn-sm { padding: 9px 12px !important; min-height: 36px; }
+  /* 5-колоночные breakdown карточки → 1 колонка */
+  .card > div[style*="repeat(5"] {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .card > div[style*="repeat(5"] > div {
+    border-right: none !important;
+    border-bottom: 1px solid var(--border) !important;
+    padding: 12px 0 !important;
+  }
+  .card > div[style*="repeat(5"] > div:last-child { border-bottom: none !important; }
 
   /* Grids collapse to 1 or 2 col */
   .grid-4, .grid-3 { grid-template-columns: 1fr 1fr !important; gap: 12px !important; }
@@ -4887,6 +4909,39 @@ function renderRatesLastUpdated() {
   el.textContent = 'Сохранено: ' + formatDate(state.rates.lastUpdated);
 }
 
+async function fetchExchangeRates() {
+  // Skip if already fetched today
+  if (state.rates && state.rates.lastUpdated === today()) return;
+  try {
+    const res = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+    if (!res.ok) return;
+    const data = await res.json();
+    const kzt = Math.round(data.rates && data.rates.KZT ? data.rates.KZT : 0);
+    const rub = Math.round(data.rates && data.rates.RUB ? data.rates.RUB : 0);
+    if (!kzt || !rub) return;
+
+    document.getElementById('rate-usd-kzt').value = kzt;
+    document.getElementById('rate-usd-rub').value = rub;
+
+    if (!state.rates) state.rates = { history: [] };
+    state.rates.usdKzt = kzt;
+    state.rates.usdRub = rub;
+    state.rates.lastUpdated = today();
+    if (!state.rates.history) state.rates.history = [];
+    const lastH = state.rates.history[state.rates.history.length - 1];
+    if (!lastH || lastH.date !== today()) {
+      state.rates.history.push({ date: today(), usdKzt: kzt, usdRub: rub });
+      if (state.rates.history.length > 90) state.rates.history.shift();
+    } else {
+      lastH.usdKzt = kzt;
+      lastH.usdRub = rub;
+    }
+    save();
+    recalcAll();
+    renderRatesLastUpdated();
+  } catch(e) {}
+}
+
 // ══════════════════════════════════════════════════════════════════
 //  SETTINGS MODAL
 // ══════════════════════════════════════════════════════════════════
@@ -5793,6 +5848,7 @@ function init() {
   checkiOSInstall();
 
   checkAutoAccrual();
+  fetchExchangeRates();
   recalcAll();
   renderRatesLastUpdated();
   if (state.income && state.income.length) renderIncomeTab();
