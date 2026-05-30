@@ -385,6 +385,11 @@ button, a, .bn-item, .drawer-item, .bp-item, .broker-sub-tab,
     flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 20px;
   }
   .page-title { font-size: 28px !important; }
+  /* .card overflow:hidden блокирует скролл дочерних btn-row — убираем на мобильном.
+     Карточки с inline overflow:hidden (kzt-deposits-card и др.) не затронуты,
+     т.к. inline-стиль имеет более высокий приоритет. */
+  .card { overflow: visible; }
+
   /* Кнопки горизонтально скроллятся — не переносятся */
   .btn-row {
     flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
@@ -394,6 +399,16 @@ button, a, .bn-item, .drawer-item, .bp-item, .broker-sub-tab,
   .btn-row .btn { flex-shrink: 0; }
   .btn { padding: 11px 16px !important; font-size: 10px !important; min-height: 44px; }
   .btn-sm { padding: 9px 12px !important; min-height: 36px; }
+
+  /* Вкладки брокера и депозита — горизонтальный скролл если не помещаются */
+  .broker-sub-tabs, .dep-sub-tabs {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; border-radius: var(--radius-sm);
+  }
+  .broker-sub-tabs::-webkit-scrollbar, .dep-sub-tabs::-webkit-scrollbar { display: none; }
+  .broker-sub-tab, .dep-sub-tab {
+    flex: 0 0 auto; white-space: nowrap; min-width: 80px;
+  }
   /* 5-колоночные breakdown карточки → 1 колонка */
   .card > div[style*="repeat(5"] {
     grid-template-columns: 1fr 1fr !important;
