@@ -397,8 +397,30 @@ button, a, .bn-item, .drawer-item, .bp-item, .broker-sub-tab,
   }
   .btn-row::-webkit-scrollbar { display: none; }
   .btn-row .btn { flex-shrink: 0; }
+  /* width:100% обязателен — иначе в flex-column (page-header) btn-row сжимается
+     и overflow-x:auto не создаёт scroll-контейнер */
+  .btn-row { width: 100%; }
   .btn { padding: 11px 16px !important; font-size: 10px !important; min-height: 44px; }
   .btn-sm { padding: 9px 12px !important; min-height: 36px; }
+
+  /* ── Таблицы — горизонтальный скролл ── */
+  /* Открытые позиции: нет overflow-обёртки — добавляем */
+  [id$="-open-positions"] {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+  }
+  /* Таблицы шире экрана → обязательный min-width активирует скролл */
+  [id$="-open-positions"] .history-table { min-width: 420px; }
+  [id$="-panel-balance"]  .history-table { min-width: 540px; }
+  [id$="-panel-trades"]   .history-table { min-width: 560px; }
+  /* Таблица сделок: скрываем наименее важные колонки (Дней/Плечо/Комис./Своп/Заметка)
+     Оставляем: Дата(1) Тикер(2) Напр.(3) Шт.(4) Откр.(5) Закр.(6) P&L(11) Кнопка(13) */
+  [id$="-panel-trades"] th:nth-child(7), [id$="-panel-trades"] td:nth-child(7),
+  [id$="-panel-trades"] th:nth-child(8), [id$="-panel-trades"] td:nth-child(8),
+  [id$="-panel-trades"] th:nth-child(9), [id$="-panel-trades"] td:nth-child(9),
+  [id$="-panel-trades"] th:nth-child(10),[id$="-panel-trades"] td:nth-child(10),
+  [id$="-panel-trades"] th:nth-child(12),[id$="-panel-trades"] td:nth-child(12) {
+    display: none;
+  }
 
   /* Вкладки брокера и депозита — горизонтальный скролл если не помещаются */
   .broker-sub-tabs, .dep-sub-tabs {
