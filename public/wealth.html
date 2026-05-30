@@ -4943,18 +4943,22 @@ function renderMonthlyReturnChart() {
 function renderRatesLastUpdated() {
   const el = document.getElementById('rates-last-updated');
   if (!el || !state.rates || !state.rates.lastUpdated) return;
-  el.textContent = 'Сохранено: ' + formatDate(state.rates.lastUpdated);
+  const src = state.rates.ratesSource === 'nbk' ? '· НБ РК' : state.rates.ratesSource === 'exchangerate-api' ? '· ExRate' : '';
+  el.textContent = 'Авто ' + formatDate(state.rates.lastUpdated) + ' ' + src;
 }
 
-async function fetchExchangeRates() {
-  // Skip if already fetched today
-  if (state.rates && state.rates.lastUpdated === today()) return;
+async function fetchExchangeRates(force) {
+  // Обновляем если прошло больше 4 часов (или force=true)
+  const FOUR_HOURS = 4 * 60 * 60 * 1000;
+  const lastTs = state.rates && state.rates.lastUpdatedTs;
+  if (!force && lastTs && (Date.now() - lastTs) < FOUR_HOURS) return;
   try {
-    const res = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+    // Запрос к собственному API (Нацбанк РК → fallback exchangerate-api)
+    const res = await fetch('/api/rates');
     if (!res.ok) return;
     const data = await res.json();
-    const kzt = Math.round(data.rates && data.rates.KZT ? data.rates.KZT : 0);
-    const rub = Math.round(data.rates && data.rates.RUB ? data.rates.RUB : 0);
+    const kzt = data.usdKzt;
+    const rub = data.usdRub;
     if (!kzt || !rub) return;
 
     document.getElementById('rate-usd-kzt').value = kzt;
@@ -4964,14 +4968,15 @@ async function fetchExchangeRates() {
     state.rates.usdKzt = kzt;
     state.rates.usdRub = rub;
     state.rates.lastUpdated = today();
+    state.rates.lastUpdatedTs = Date.now();
+    state.rates.ratesSource = data.source || 'auto';
     if (!state.rates.history) state.rates.history = [];
     const lastH = state.rates.history[state.rates.history.length - 1];
     if (!lastH || lastH.date !== today()) {
-      state.rates.history.push({ date: today(), usdKzt: kzt, usdRub: rub });
+      state.rates.history.push({ date: today(), usdKzt: kzt, usdRub: rub, source: data.source });
       if (state.rates.history.length > 90) state.rates.history.shift();
     } else {
-      lastH.usdKzt = kzt;
-      lastH.usdRub = rub;
+      lastH.usdKzt = kzt; lastH.usdRub = rub;
     }
     save();
     recalcAll();
@@ -5886,6 +5891,8 @@ function init() {
 
   checkAutoAccrual();
   fetchExchangeRates();
+  // Автообновление каждые 4 часа пока приложение открыто
+  setInterval(() => fetchExchangeRates(), 4 * 60 * 60 * 1000);
   recalcAll();
   renderRatesLastUpdated();
   if (state.income && state.income.length) renderIncomeTab();
