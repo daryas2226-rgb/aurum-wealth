@@ -371,6 +371,113 @@ button, a, .bn-item, .drawer-item, .bp-item, .broker-sub-tab,
 .bp-add-btn { color: rgba(166,130,74,0.75); }
 .bp-add-btn .bp-name { color: rgba(166,130,74,0.75); font-weight: 400; }
 
+/* ═══════════════════════════════════════════════════
+   TELEGRAM DESKTOP — forced sidebar layout
+   Класс tg-desktop ставится в JS когда платформа
+   tdesktop/macos/web и вызывается requestFullscreen().
+   Переопределяет mobile @media правила.
+═══════════════════════════════════════════════════ */
+body.tg-desktop .sidebar { display: flex !important; }
+body.tg-desktop .bottom-nav,
+body.tg-desktop .more-drawer,
+body.tg-desktop .broker-picker,
+body.tg-desktop .drawer-overlay { display: none !important; }
+body.tg-desktop .main {
+  margin-left: 210px !important;
+  max-width: calc(100vw - 210px) !important;
+  padding: 24px 28px !important;
+}
+body.tg-desktop .page-header { flex-direction: row !important; align-items: flex-end !important; gap: 0 !important; margin-bottom: 24px !important; }
+body.tg-desktop .page-title { font-size: 32px !important; }
+body.tg-desktop .card { overflow: hidden !important; }
+body.tg-desktop .btn-row { flex-wrap: wrap !important; overflow-x: visible !important; width: auto !important; }
+body.tg-desktop .btn { padding: 11px 24px !important; }
+body.tg-desktop [id$="-open-positions"] { overflow-x: visible; }
+body.tg-desktop .grid-4 { grid-template-columns: repeat(2,1fr) !important; gap: 14px !important; margin-bottom: 16px !important; }
+body.tg-desktop .grid-3 { grid-template-columns: repeat(3,1fr) !important; gap: 14px !important; margin-bottom: 16px !important; }
+body.tg-desktop .grid-2 { grid-template-columns: repeat(2,1fr) !important; gap: 14px !important; margin-bottom: 16px !important; }
+body.tg-desktop .total-main { font-size: 46px !important; }
+body.tg-desktop .total-currencies { gap: 20px !important; flex-wrap: nowrap !important; }
+body.tg-desktop .broker-hero { grid-template-columns: 1fr 1fr 1fr !important; }
+body.tg-desktop .bh-cell + .bh-cell { border-left: 1px solid var(--border) !important; border-top: none !important; }
+body.tg-desktop .bh-main { font-size: 32px !important; }
+body.tg-desktop .broker-analytics-row { grid-template-columns: repeat(5,1fr) !important; }
+body.tg-desktop canvas { max-height: none !important; }
+body.tg-desktop .modal-overlay { align-items: center !important; }
+body.tg-desktop .modal { width: 520px !important; max-width: 90vw !important; border-radius: var(--radius) !important; padding: 32px !important; max-height: 90vh !important; }
+body.tg-desktop .modal-wide { width: 680px !important; }
+body.tg-desktop .modal::before { display: none !important; }
+body.tg-desktop .card > div[style*="repeat(5"] { grid-template-columns: repeat(5,1fr) !important; }
+body.tg-desktop #deposits-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important; }
+body.tg-desktop .analytics-banner { grid-template-columns: repeat(4,1fr) !important; }
+body.tg-desktop .notif { bottom: 24px !important; left: auto !important; right: 24px !important; }
+
+/* ═══════════════════════════════════════════════════
+   LAPTOP / SMALL DESKTOP  (769px – 1366px)
+═══════════════════════════════════════════════════ */
+@media (min-width: 769px) and (max-width: 1366px) {
+  /* Narrower sidebar */
+  .sidebar { width: 210px; }
+  .logo { padding: 24px 20px 16px; }
+  .logo-name { font-size: 22px; letter-spacing: 3px; }
+  .nav-section { padding: 10px 20px 3px; }
+  .nav-item { padding: 10px 20px; font-size: 11px; gap: 10px; }
+  .sidebar-rates { padding: 12px 20px; }
+
+  /* Main content — less padding */
+  .main { margin-left: 210px; max-width: calc(100vw - 210px); padding: 24px 28px; }
+
+  /* Page header */
+  .page-header { margin-bottom: 24px; }
+  .page-title { font-size: 32px !important; }
+
+  /* Total card */
+  .total-card { padding: 22px; margin-bottom: 16px; }
+  .total-main { font-size: 46px !important; }
+  .total-currencies { gap: 20px; margin-top: 10px; }
+  .total-curr-value { font-size: 17px; }
+
+  /* Regular cards */
+  .card { padding: 18px; }
+  .card-value { font-size: 28px; }
+
+  /* Grids — tighter gaps */
+  .grid-4 { gap: 14px !important; margin-bottom: 16px; }
+  .grid-3 { gap: 14px !important; margin-bottom: 16px; }
+  .grid-2 { gap: 14px !important; margin-bottom: 16px; }
+  .grid-1 { gap: 14px !important; margin-bottom: 16px; }
+
+  /* Section dividers */
+  .section-divider { margin: 20px 0 14px !important; }
+  .section-divider-title { font-size: 18px; }
+
+  /* Broker hero */
+  .bh-main { font-size: 32px !important; }
+  .bh-cell { padding: 18px 20px; }
+
+  /* Analytics banner */
+  .analytics-banner { gap: 14px; margin-bottom: 16px; }
+  .ab-val { font-size: 24px; }
+
+  /* KPI cards */
+  .kpi-card { padding: 16px 18px !important; }
+  .kpi-val { font-size: 26px !important; }
+
+  /* Broker analytics row */
+  .broker-analytics-row { gap: 10px; margin-bottom: 16px; }
+  .bar-item { padding: 12px 14px; }
+  .bar-val { font-size: 18px; }
+
+  /* Calc result */
+  .calc-result-main { font-size: 30px; }
+
+  /* Currency amount */
+  .currency-amount { font-size: 26px !important; }
+
+  /* Analytics big */
+  .analytics-big { font-size: 36px; }
+}
+
 @media (max-width: 768px) {
   /* Show bottom nav, hide desktop sidebar */
   .sidebar { display: none !important; }
@@ -590,8 +697,20 @@ button, a, .bn-item, .drawer-item, .bp-item, .broker-sub-tab,
 <script>
   // Telegram WebApp init
   if (window.Telegram && window.Telegram.WebApp) {
-    window.Telegram.WebApp.ready();
-    window.Telegram.WebApp.expand();
+    var tgApp = window.Telegram.WebApp;
+    tgApp.ready();
+    tgApp.expand();
+
+    // On desktop Telegram (tdesktop / macOS / web) — request fullscreen
+    // so the WebApp fills the entire Telegram window rather than the narrow side panel.
+    // requestFullscreen() is available since Telegram Bot API 8.0 (Nov 2024).
+    var desktopPlatforms = ['tdesktop', 'macos', 'web', 'weba'];
+    if (desktopPlatforms.indexOf(tgApp.platform) !== -1) {
+      document.body.classList.add('tg-desktop');
+      if (typeof tgApp.requestFullscreen === 'function') {
+        tgApp.requestFullscreen();
+      }
+    }
   }
 
   // Access guard — only owner can use this app
@@ -2784,7 +2903,14 @@ let state = {
 
 let currentDepositId = null;
 
-function save() { try { localStorage.setItem('dasha_wealth_v2', JSON.stringify(state)); } catch(e){} }
+function save() {
+  try {
+    if (state._seed) delete state._seed;        // любое сохранение = реальные данные
+    state.updatedAt = Date.now();
+    localStorage.setItem('dasha_wealth_v2', JSON.stringify(state));
+  } catch(e){}
+  cloudPushDebounced();                          // отправить в облако (с задержкой)
+}
 function load() {
   try {
     const d = localStorage.getItem('dasha_wealth_v2');
@@ -2814,6 +2940,72 @@ function load() {
     if (rubInput && state.rates.usdRub) rubInput.value = state.rates.usdRub;
     renderRatesLastUpdated();
   } catch(e) {}
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  ОБЛАЧНАЯ СИНХРОНИЗАЦИЯ (телефон ⇄ ноутбук через /api/state)
+// ══════════════════════════════════════════════════════════════════
+function tgInitData(){ try { return (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) || ''; } catch(e){ return ''; } }
+function cloudEnabled(){ return tgInitData().length > 0; }
+
+// Признак «нетронутых стартовых данных» (seed). Такие данные НИКОГДА не уезжают
+// в облако — чтобы свежеоткрытый ноутбук случайно не затёр реальные данные телефона.
+function isPristineSeed(s){
+  try {
+    return !!s && Array.isArray(s.deposits) && s.deposits.length === 1
+      && s.deposits[0] && s.deposits[0].id === 'monvce4or1ylfsfzn2e'
+      && s.us && s.us.name === 'US Брокер МАМА' && s.us.balance === 680
+      && s.ru && s.ru.balance === 137995;
+  } catch(e){ return false; }
+}
+
+async function cloudFetch(){
+  if (!cloudEnabled()) return null;
+  try {
+    const r = await fetch('/api/state', { headers: { 'x-telegram-init-data': tgInitData() }, cache: 'no-store' });
+    if (!r.ok) return null;
+    const j = await r.json();
+    return (j && j.data) ? j : null;            // { data, updatedAt }
+  } catch(e){ return null; }
+}
+
+let _cloudTimer = null, _cloudPending = false, _cloudBusy = false;
+function cloudPushDebounced(){
+  if (!cloudEnabled() || state._seed || isPristineSeed(state)) return;
+  _cloudPending = true;
+  clearTimeout(_cloudTimer);
+  _cloudTimer = setTimeout(cloudFlush, 1200);
+}
+async function cloudFlush(){
+  if (!cloudEnabled() || state._seed || isPristineSeed(state)) return;
+  if (_cloudBusy) { _cloudPending = true; return; }
+  _cloudBusy = true; _cloudPending = false;
+  try {
+    await fetch('/api/state', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-telegram-init-data': tgInitData() },
+      body: JSON.stringify({ data: state, updatedAt: state.updatedAt || Date.now() })
+    });
+  } catch(e){}
+  _cloudBusy = false;
+  if (_cloudPending) cloudFlush();
+}
+
+// Подтянуть данные с другого устройства. Если в облаке версия свежее —
+// записываем её локально и перезагружаем экран, чтобы показать актуальное.
+let _pulling = false;
+async function cloudPull(){
+  if (_pulling || !cloudEnabled()) return;
+  _pulling = true;
+  try {
+    const c = await cloudFetch();
+    if (c && c.data && (c.updatedAt || 0) > (state.updatedAt || 0) + 1) {
+      localStorage.setItem('dasha_wealth_v2', JSON.stringify(c.data));
+      location.reload();
+      return;
+    }
+  } catch(e){}
+  _pulling = false;
 }
 
 // ══════════════════════════════════════════════════════════════════
@@ -5922,8 +6114,8 @@ function init() {
   }
 }
 
-// ── DATA SEED (runs once on first open) ──────────────────────────
-(function() {
+// ── DATA SEED (только если нет ни локальных, ни облачных данных) ───
+function seedLocal() {
   if (localStorage.getItem('dasha_wealth_v2')) return;
   function uid2(prefix){ return prefix+'_'+(Date.now().toString(36)+Math.random().toString(36).slice(2)); }
   var depId = 'monvce4or1ylfsfzn2e';
@@ -6044,11 +6236,43 @@ function init() {
       { date: '2026-05-16', usdKzt: 455, usdRub: 88 }
     ]}
   };
+  SEED._seed = true;                  // стартовые данные — не уезжают в облако
   localStorage.setItem('dasha_wealth_v2', JSON.stringify(SEED));
-})();
+}
 // ── END DATA SEED ─────────────────────────────────────────────────
 
-init();
+// ══════════════════════════════════════════════════════════════════
+//  СТАРТ: сначала облако, потом рендер.
+//  Логика безопасна к порядку открытия устройств:
+//   • есть данные в облаке → берём их (ноутбук видит то же, что телефон);
+//   • облако пустое + локально реальные данные (телефон) → выгружаем в облако;
+//   • облако пустое + локально стартовый seed (ноут) → ничего не выгружаем.
+// ══════════════════════════════════════════════════════════════════
+async function boot() {
+  var cloud = null;
+  try { cloud = await cloudFetch(); } catch(e){}
+
+  if (cloud && cloud.data) {
+    // В облаке есть актуальное состояние — оно источник правды
+    try { localStorage.setItem('dasha_wealth_v2', JSON.stringify(cloud.data)); } catch(e){}
+  } else if (!localStorage.getItem('dasha_wealth_v2')) {
+    // Совсем чистое устройство и пустое облако — показать стартовые данные
+    seedLocal();
+  }
+
+  init();   // load() прочитает localStorage и отрисует экран
+
+  // Если в облаке пусто, а локально лежат реальные данные (телефон) — выгрузить их.
+  if ((!cloud || !cloud.data) && !state._seed && !isPristineSeed(state)) {
+    cloudFlush();
+  }
+
+  // Подтягивать изменения с другого устройства при возврате в приложение
+  document.addEventListener('visibilitychange', function(){ if (!document.hidden) cloudPull(); });
+  window.addEventListener('focus', cloudPull);
+}
+
+boot();
 </script>
 
 
